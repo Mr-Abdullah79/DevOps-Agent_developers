@@ -5,15 +5,12 @@ OUT_DIR := out
 SOURCES := $(wildcard $(SRC_DIR)/*.md)
 OUTPUTS := $(patsubst $(SRC_DIR)/%.md,$(OUT_DIR)/%.html,$(SOURCES))
 
-.PHONY: all check build deps test package clean ci
+.PHONY: all deps check build test clean ci
 
-all: ci
+all: test
 
-check:
-	@test -n "$(SOURCES)" || (echo "No Markdown source files found"; exit 1)
-	@test -f tools/build.js || (echo "Missing tools/build.js"; exit 1)
-	@test -f package.json || (echo "Missing package.json"; exit 1)
-	@test -f package-lock.json || (echo "Missing package-lock.json"; exit 1)
+$(OUT_DIR):
+	mkdir -p $(OUT_DIR)
 
 node_modules: package-lock.json
 	npm ci
@@ -21,23 +18,27 @@ node_modules: package-lock.json
 
 deps: node_modules
 
-build: $(OUTPUTS)
-
-$(OUT_DIR):
-	mkdir -p $(OUT_DIR)
-
 $(OUT_DIR)/%.html: $(SRC_DIR)/%.md package-lock.json | $(OUT_DIR) node_modules
 	@echo "BUILD $< -> $@"
 	@npm run --silent build -- $< $@
 
+check:
+	@if [ ! -d "$(SRC_DIR)" ]; then \
+		echo "ERROR: source directory $(SRC_DIR) not found"; \
+		exit 1; \
+	fi
+	@if [ -z "$(SOURCES)" ]; then \
+		echo "ERROR: no .md files found in $(SRC_DIR)"; \
+		exit 1; \
+	fi
+	@echo "CHECK PASSED: found $(words $(SOURCES)) source files"
+
+build: $(OUTPUTS)
+
 test: build
 	@npm test --silent
 
-package: test
-	npm pack
-
 clean:
-	rm -rf $(OUT_DIR) *.tgz
+	rm -rf $(OUT_DIR)
 
-ci: clean deps check test package
-
+ci: clean check test

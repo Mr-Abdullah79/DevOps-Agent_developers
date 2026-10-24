@@ -1,21 +1,19 @@
+
 {
-  "main": "index.js",
   "name": "devops-pipeline",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Renders the course Markdown sources into HTML pages.",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "node --test",
-    "build": "node tools/build.js"
+  "main": "tools/build.js",
+  "bin": {
+    "devops-build": "tools/build.js"
   },
   "files": [
     "tools/",
     "README.md"
   ],
-  "bin": {
-    "devops-build": "tools/build.js"
+  "scripts": {
+    "build": "node tools/build.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
@@ -24,3 +22,4 @@
     "markdown-it": "^15.0.3"
   }
 }
+
