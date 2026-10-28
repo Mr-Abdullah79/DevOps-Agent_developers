@@ -1,24 +1,17 @@
 #!/usr/bin/env node
-// tools/build.js — renders one Markdown source into one HTML page.
-// Called by the Makefile:  npm run build -- src/notes.md out/notes.html
 const fs = require('fs');
-const path = require('path');
 const MarkdownIt = require('markdown-it');
+const md = new MarkdownIt();
 
-const [src, dest] = process.argv.slice(2);
-if (!src || !dest) {
-  console.error('usage: build.js <source.md> <dest.html>');
-  process.exit(2);
+const args = process.argv.slice(2);
+if (args.length < 2) {
+    console.error('usage: node tools/build.js <source.md> <dest.html>');
+    process.exit(1);
 }
 
-const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
-const body = md.render(fs.readFileSync(src, 'utf8'));
-const title = path.basename(src, '.md');
+const [src, dest] = args;
+const content = fs.readFileSync(src, 'utf8');
+const title = src.split('/').pop().replace('.md', '');
+const html = `<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<title>${title}</title>\n${md.render(content)}\n</html>\n`;
 
-fs.mkdirSync(path.dirname(dest), { recursive: true });
-fs.writeFileSync(dest, `<!doctype html>
-<html lang="en">
-<meta charset="utf-8">
-<title>${title}</title>
-${body}</html>
-`);
+fs.writeFileSync(dest, html);
