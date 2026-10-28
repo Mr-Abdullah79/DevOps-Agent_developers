@@ -1,5 +1,5 @@
 {
-  "name": "devops-pipeline",
+  "name": "@Mr-Abdullah79/devops-pipeline",
   "version": "1.1.1",
   "description": "Renders the course Markdown sources into HTML pages.",
   "main": "tools/build.js",
@@ -14,10 +14,18 @@
     "build": "node tools/build.js",
     "test": "node --test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mr-Abdullah79/DevOps-Agent_developers.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "markdown-it": "^15.0.3"
+    "markdown-it": "^15.0.3",
+    "js-yaml": "4.1.0"
   }
 }
