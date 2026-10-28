@@ -1,3 +1,1 @@
-# Hello DevOps
-
-This is the **first** sample input.
+-I Hello from DevOps Lab 05
