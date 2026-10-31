@@ -17,5 +17,12 @@ test('every page is real HTML and not raw Markdown', () => {
     assert.doesNotMatch(html, /^# /m);
   }
 });
-
+test('every page names the course', () => {
+  for (const p of pages) {
+    assert.match(
+      fs.readFileSync('out/' + p, 'utf8'),
+      /DevOps/
+    );
+  }
+});
 
