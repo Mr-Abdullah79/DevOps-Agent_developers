@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
 
@@ -11,7 +12,8 @@ if (args.length < 2) {
 
 const [src, dest] = args;
 const content = fs.readFileSync(src, 'utf8');
-const title = src.split('/').pop().replace('.md', '');
-const html = `<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<title>${title}</title>\n${md.render(content)}\n</html>\n`;
-
+const title = path.basename(src, '.md')
+  .replace(/-/g, ' ')
+  .replace(/\b\w/g, (c) => c.toUpperCase());
+const html = `<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<title>${title}</title>\n${md.render(content)}`;
 fs.writeFileSync(dest, html);
