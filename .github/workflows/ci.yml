@@ -12,5 +12,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
       - name: Build, test and package
         run: make ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: devops-pipeline
+          path: '*.tgz'
+          if-no-files-found: error
