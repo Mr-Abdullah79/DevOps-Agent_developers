@@ -21,3 +21,5 @@ test('every page is real HTML and not raw Markdown', () => {
 test('build output exists', () => {
   assert.ok(true);
 });
+
+test('this always fails', () => assert.ok(false));
