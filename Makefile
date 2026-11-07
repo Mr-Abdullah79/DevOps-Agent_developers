@@ -22,12 +22,21 @@ build: $(OUTPUTS)
 test: build
 	@npm test --silent
 
+coverage: build ## the tests again, writing coverage/lcov.info for SonarQube
+	@mkdir -p coverage
+	node --test --experimental-test-coverage \
+		--test-reporter spec --test-reporter-destination=stdout \
+		--test-reporter=lcov --test-reporter-destination=coverage/lcov.info
+
 clean:
-	rm -rf $(OUT_DIR) *.tgz
+	rm -rf $(OUT_DIR) coverage *.tgz
 
 package: test
 	npm pack
 
-ci: clean deps build test package
+ci: clean deps lint test package
 
-.PHONY: all build clean ci deps test package
+.PHONY: all build clean ci deps test package lint coverage
+
+lint: node_modules ## static analysis
+	npm run --silent lint
