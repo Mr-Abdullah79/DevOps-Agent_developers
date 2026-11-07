@@ -28,6 +28,9 @@ clean:
 package: test
 	npm pack
 
-ci: clean deps build test package
+ci: clean deps build lint test package
 
-.PHONY: all build clean ci deps test package
+lint: node_modules
+	npm run --silent lint
+
+.PHONY: all build clean ci deps test package lint check
