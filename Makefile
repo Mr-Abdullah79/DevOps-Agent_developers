@@ -31,3 +31,6 @@ package: test
 ci: clean deps build test package
 
 .PHONY: all build clean ci deps test package
+
+lint: node_modules
+	npm run-silent lint
