@@ -1,4 +1,3 @@
-
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { renderPage, main } = require('../tools/build');
@@ -14,6 +13,7 @@ test('the title is the one we pass in', () => {
 test('missing arguments give the usage exit code', () => {
   assert.strictEqual(main([]), 2);
 });
+
 test('main writes the page it was asked for', () => {
   const os = require('os');
   const fs = require('fs');
