@@ -1,3 +1,4 @@
+const unusedLimit = 100;
 #!/usr/bin/env node
 // tools/build.js — renders one Markdown source into one HTML page.
 
