@@ -9,3 +9,7 @@ test('pages with different titles are not duplicates', () => {
 test('pages with the same title are duplicates', () => {
   assert.strictEqual(isDuplicate({ title: 'a' }, { title: 'a' }), true);
 });
+
+test('missing page returns false', () => {
+  assert.strictEqual(isDuplicate(null, { title: 'a' }), false);
+});
