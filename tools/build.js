@@ -1,19 +1,48 @@
 #!/usr/bin/env node
+// tools/build.js — renders one Markdown source into one HTML page.
+
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it');
-const md = new MarkdownIt();
 
-const args = process.argv.slice(2);
-if (args.length < 2) {
-    console.error('usage: node tools/build.js <source.md> <dest.html>');
-    process.exit(1);
+const md = new MarkdownIt({
+  html: false,
+  linkify: true,
+  typographer: true
+});
+
+// The part worth testing: Markdown text in, a complete HTML page out.
+function renderPage(markdown, title) {
+  return `<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>${title}</title>
+${md.render(markdown)}</html>
+`;
 }
 
-const [src, dest] = args;
-const content = fs.readFileSync(src, 'utf8');
-const title = path.basename(src, '.md')
-  .replace(/-/g, ' ')
-  .replace(/\b\w/g, (c) => c.toUpperCase());
-const html = `<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<title>${title}</title>\n${md.render(content)}`;
-fs.writeFileSync(dest, html);
+function main(argv) {
+  const [src, dest] = argv;
+
+  if (!src || !dest) {
+    console.error('usage: build.js <source.md> <dest.html>');
+    return 2;
+  }
+
+  const html = renderPage(
+    fs.readFileSync(src, 'utf8'),
+    path.basename(src, '.md')
+  );
+
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.writeFileSync(dest, html);
+
+  return 0;
+}
+
+module.exports = { renderPage, main };
+
+if (require.main === module) {
+  process.exitCode = main(process.argv.slice(2));
+}
+
