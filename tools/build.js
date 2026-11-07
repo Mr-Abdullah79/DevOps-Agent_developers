@@ -1,10 +1,11 @@
+const unusedLimit = 100;
 #!/usr/bin/env node
 // tools/build.js — renders one Markdown source into one HTML page.
 
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it');
-
+const unusedLimit = 100;
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
 
 function renderPage(markdown, title) {
